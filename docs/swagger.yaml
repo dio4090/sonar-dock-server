@@ -1,10 +1,67 @@
 basePath: /api/v1
+definitions:
+  controllers.LoginRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  controllers.LoginResponse:
+    properties:
+      token:
+        type: string
+    type: object
+  model.ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+  model.ForbiddenResponse:
+    properties:
+      Invalid username or password:
+        type: string
+    type: object
 info:
   contact: {}
-  description: Esta é a API de gerenciamento de projetos Skyward.
-  title: API de Projetos Skyward
+  description: Esta é a API de gerenciamento de projetos Sonar Dock.
+  title: API de Projetos Sonar Dock
   version: "1.0"
-paths: {}
+paths:
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Autentica um usuário e retorna um token JWT
+      parameters:
+      - description: Credenciais de Login
+        in: body
+        name: login
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Token JWT para autenticação nas requisições subsequentes
+          schema:
+            $ref: '#/definitions/controllers.LoginResponse'
+        "400":
+          description: Requisição inválida
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+        "403":
+          description: Usuário ou senha inválidos
+          schema:
+            $ref: '#/definitions/model.ForbiddenResponse'
+      summary: Login
+      tags:
+      - auth
 schemes:
 - http
 - https

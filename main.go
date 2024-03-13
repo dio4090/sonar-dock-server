@@ -6,6 +6,7 @@ import (
 
 	"github.com/dio4090/sonar-dock-server/config"
 	"github.com/dio4090/sonar-dock-server/docs"
+	"github.com/dio4090/sonar-dock-server/routes"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	swaggerFiles "github.com/swaggo/files"
@@ -45,9 +46,12 @@ func setupRouter() *gin.Engine {
 	r := gin.Default()
 	r.Use(config.CORSMiddleware())
 
+	// Configuração do Swagger
 	docs.SwaggerInfo.BasePath = "/api/v1"
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
+	// Chamada para registrar as rotas
+	routes.RegisterRoutes(r)
 	return r
 }
 
