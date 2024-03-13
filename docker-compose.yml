@@ -1,0 +1,39 @@
+version: '3.8'
+services:
+  dynamodb:
+    command: "-jar DynamoDBLocal.jar -sharedDb -dbPath ./data"
+    image: "amazon/dynamodb-local:latest"
+    container_name: sonar-dock-dynamodb
+    networks: 
+      - sonar_dock_net
+    ports:
+      - "8000:8000"
+    volumes:
+      - "./docker/dynamodb:/home/dynamodblocal/data"
+    working_dir: /home/dynamodblocal
+
+  redis:
+    image: redis:7.2.4
+    container_name: sonar-dock-redis
+    networks: 
+      - sonar_dock_net
+    ports:
+      - "6379:6379"
+    volumes:
+      - "./docker/redis:/data"
+
+  sonar-dock-server:
+    image: sonar-dock-be:latest
+    container_name: sonar-dock-be
+    build: .
+    networks:
+      - sonar_dock_net
+    ports:
+      - "8080:8080"
+    env_file:
+      - ./.env
+    restart: unless-stopped
+
+networks:
+  sonar_dock_net:
+    name: sonar_dock_net
