@@ -1,0 +1,16 @@
+basePath: /api/v1
+info:
+  contact: {}
+  description: Esta é a API de gerenciamento de projetos Skyward.
+  title: API de Projetos Skyward
+  version: "1.0"
+paths: {}
+schemes:
+- http
+- https
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
